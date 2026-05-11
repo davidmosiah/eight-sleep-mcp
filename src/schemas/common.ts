@@ -249,6 +249,32 @@ export const NightlySummaryInputSchema = z.object({
   response_format: ResponseFormatSchema
 }).strict();
 
+// ---------------------- shared Delx Wellness profile ----------------------
+
+const ExplicitUserIntentSchema = z
+  .boolean()
+  .default(false)
+  .describe("Pass true only after the user explicitly asked to save, log, set, or delete this personal wellness profile data.");
+
+export const ProfileUpdateInputSchema = z
+  .object({
+    patch: z
+      .record(z.string(), z.unknown())
+      .describe(
+        "Partial WellnessProfileDocument patch. Top-level keys: profile, goals, devices, training, nutrition, preferences, safety, notes."
+      ),
+    explicit_user_intent: ExplicitUserIntentSchema,
+    response_format: ResponseFormatSchema
+  })
+  .strict();
+
+export const OnboardingInputSchema = z
+  .object({
+    locale: z.enum(["en", "pt-BR"]).default("en"),
+    response_format: ResponseFormatSchema
+  })
+  .strict();
+
 export const NightlySummaryOutputSchema = z.object({
   kind: z.literal("nightly_summary"),
   generated_at: z.string()

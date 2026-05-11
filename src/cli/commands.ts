@@ -1,6 +1,12 @@
 import { buildConnectionStatus } from "../services/connection-status.js";
 import { SERVER_VERSION } from "../constants.js";
 import { parseAgentClientName } from "../services/agent-manifest.js";
+import {
+  getOnboardingFlow,
+  getProfile,
+  getProfilePath,
+  missingCriticalFields,
+} from "../services/profile-store.js";
 import { runAuthCommand } from "./auth.js";
 import { runSetupCommand } from "./setup.js";
 
@@ -10,6 +16,7 @@ export async function runCliCommand(args: string[]): Promise<number | undefined>
   if (command === "setup") return runSetupCommand(rest);
   if (command === "doctor" || command === "status") return runDoctor(rest);
   if (command === "login" || command === "auth") return runAuthCommand(rest);
+  if (command === "onboarding") return runOnboardingCommand(rest);
   if (command === "version" || command === "--version" || command === "-v") {
     console.log(SERVER_VERSION);
     return 0;
@@ -85,6 +92,38 @@ function printDoctor(status: Awaited<ReturnType<typeof buildConnectionStatus>>):
   status.next_steps.forEach((step, index) => console.log(`  ${index + 1}. ${step}`));
 }
 
+async function runOnboardingCommand(args: string[]): Promise<number> {
+  const localeArg = args.find((arg) => !arg.startsWith("--"));
+  const locale = localeArg === "pt-BR" ? "pt-BR" : "en";
+  const flow = getOnboardingFlow(locale);
+  const profile = await getProfile();
+  const missing = missingCriticalFields(profile);
+  console.log(
+    JSON.stringify(
+      {
+        ...flow,
+        current_profile: profile,
+        missing_critical: missing,
+      },
+      null,
+      2
+    )
+  );
+  if (process.stderr.isTTY && process.env.EIGHT_SLEEP_QUIET !== "1") {
+    process.stderr.write(
+      `\n## Delx Wellness shared onboarding (${locale})\n` +
+        `\nThe agent will ask these 11 questions next so eight-sleep-mcp (and the rest\n` +
+        `of the wellness stack) can personalize bedtime plans and nightly summaries —\n` +
+        `non-secret data only, stored at ${getProfilePath()}.\n\n` +
+        flow.questions
+          .map((q, i) => `${i + 1}. (${q.required ? "required" : "optional"}) ${q.prompt}`)
+          .join("\n") +
+        `\n\nPrivacy: ${flow.privacy_note}\n\n`
+    );
+  }
+  return 0;
+}
+
 function printHelp(): void {
   console.log(`Eight Sleep MCP Server (unofficial)
 
@@ -95,6 +134,7 @@ Usage:
   eight-sleep-mcp-server login           Login now and persist the token
   eight-sleep-mcp-server doctor          Check setup and next steps
   eight-sleep-mcp-server doctor --json   Print setup status as JSON
+  eight-sleep-mcp-server onboarding [pt-BR]   Print shared Delx Wellness onboarding flow
 
 Required env (or use setup):
   EIGHT_SLEEP_EMAIL

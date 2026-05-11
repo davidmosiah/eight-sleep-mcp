@@ -30,7 +30,10 @@ const STANDARD_TOOLS = [
   "eight_sleep_get_user",
   "eight_sleep_logout",
   "eight_sleep_nightly_summary",
+  "eight_sleep_onboarding",
   "eight_sleep_privacy_audit",
+  "eight_sleep_profile_get",
+  "eight_sleep_profile_update",
   "eight_sleep_wellness_context"
 ];
 
@@ -67,6 +70,7 @@ export function buildAgentManifest(client: AgentClientName = "generic") {
       secret_storage: "~/.eight-sleep-mcp/config.json or EIGHT_SLEEP_* env vars; never print secrets"
     },
     recommended_first_calls: [
+      "eight_sleep_profile_get",
       "eight_sleep_connection_status",
       "eight_sleep_data_inventory",
       "eight_sleep_get_me",

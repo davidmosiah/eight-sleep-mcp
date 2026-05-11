@@ -13,7 +13,9 @@ import {
   MutationOutputSchema,
   NightlySummaryInputSchema,
   NightlySummaryOutputSchema,
+  OnboardingInputSchema,
   PrivacyAuditOutputSchema,
+  ProfileUpdateInputSchema,
   ResponseOnlyInputSchema,
   SetAwayModeInputSchema,
   SetSideInputSchema,
@@ -33,6 +35,15 @@ import { EightSleepClient } from "../services/eight-sleep-client.js";
 import { bulletList, makeError, makeResponse } from "../services/format.js";
 import { buildDataInventory, formatInventoryMarkdown } from "../services/inventory.js";
 import { applyPrivacy, resolvePrivacyMode } from "../services/privacy.js";
+import {
+  buildProfileSummary,
+  getOnboardingFlow,
+  getProfile,
+  getProfilePath,
+  missingCriticalFields,
+  updateProfile,
+  type WellnessProfileDocument
+} from "../services/profile-store.js";
 import {
   buildNightlySummary,
   buildWellnessContext,
@@ -62,6 +73,107 @@ function requireMutations(): void {
 }
 
 export function registerEightSleepTools(server: McpServer): void {
+  // ------------------------- shared profile ------------------------
+
+  server.registerTool(
+    "eight_sleep_profile_get",
+    {
+      title: "Eight Sleep profile get",
+      description:
+        "Returns the shared Delx Wellness profile (~/.delx-wellness/profile.json). Read-only. Surfaces preferred sleep window, age, goals, and devices so eight_sleep_nightly_summary and bedtime experiments can personalize recommendations.",
+      inputSchema: ResponseOnlyInputSchema.shape,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+    },
+    async ({ response_format }) => {
+      try {
+        const profile = await getProfile();
+        const payload = {
+          ok: true,
+          profile,
+          summary: buildProfileSummary(profile),
+          missing_critical: missingCriticalFields(profile),
+          storage_path: getProfilePath()
+        };
+        const markdown = bulletList("Eight Sleep · shared profile", {
+          summary: payload.summary,
+          missing_critical: payload.missing_critical.join(", ") || "—",
+          storage_path: payload.storage_path
+        });
+        return makeResponse(payload, response_format, markdown);
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
+  server.registerTool(
+    "eight_sleep_profile_update",
+    {
+      title: "Eight Sleep profile update",
+      description:
+        "Persist a partial patch to the shared Delx Wellness profile (~/.delx-wellness/profile.json). Requires explicit_user_intent: true. Rejects any field whose key looks like a credential (oauth/token/secret/password/cookie/refresh/api_key/bearer/credential/session_id) or whose value matches credential-shaped patterns (JWT, Bearer token, sk_live_, sk-proj-, xoxb-, github_pat_).",
+      inputSchema: ProfileUpdateInputSchema.shape,
+      annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+    },
+    async ({ patch, explicit_user_intent, response_format }) => {
+      try {
+        if (explicit_user_intent !== true) {
+          return makeError(
+            "USER_ACTION_REQUIRED: explicit_user_intent must be true to update the shared wellness profile. Ask the user to confirm the change first."
+          );
+        }
+        const profile = await updateProfile(patch as Partial<WellnessProfileDocument>);
+        const payload = {
+          ok: true,
+          profile,
+          summary: buildProfileSummary(profile),
+          storage_path: getProfilePath()
+        };
+        const markdown = bulletList("Eight Sleep · profile updated", {
+          summary: payload.summary,
+          storage_path: payload.storage_path
+        });
+        return makeResponse(payload, response_format, markdown);
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
+  server.registerTool(
+    "eight_sleep_onboarding",
+    {
+      title: "Eight Sleep onboarding",
+      description:
+        "Returns the 11-question onboarding flow for the shared Delx Wellness profile (en or pt-BR). The agent should ask these questions next so Eight Sleep (and the rest of the wellness stack) can personalize responses — non-secret data only, stored at ~/.delx-wellness/profile.json.",
+      inputSchema: OnboardingInputSchema.shape,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }
+    },
+    async ({ locale, response_format }) => {
+      try {
+        const flow = getOnboardingFlow(locale);
+        const profile = await getProfile();
+        const payload = {
+          ok: true,
+          ...flow,
+          current_profile: profile,
+          missing_critical: missingCriticalFields(profile),
+          cross_connector_hint:
+            "eight-sleep-mcp reads profile.preferences and profile.goals to personalize bedtime temperature plans, nightly summary thresholds, and recovery framing. Pair with whoop/oura/garmin for HRV+strain context and wellness-nourish for pre-bed nutrition."
+        };
+        const markdown = bulletList("Eight Sleep · onboarding", {
+          locale: flow.locale,
+          questions: String(flow.questions.length),
+          storage_path: flow.storage_path,
+          missing_critical: payload.missing_critical.join(", ") || "—"
+        });
+        return makeResponse(payload, response_format, markdown);
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
   // ------------------------------ meta ------------------------------
 
   server.registerTool(
