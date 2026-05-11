@@ -5,7 +5,7 @@ Describe the change and the agent/user workflow it improves.
 ## Safety
 
 - [ ] This keeps the project explicitly unofficial.
-- [ ] This does not use private/internal WHOOP APIs.
+- [ ] This does not use private/internal Eight Sleep APIs.
 - [ ] This does not expose OAuth tokens, client secrets or personal health data.
 - [ ] This preserves read-only behavior unless the change is explicitly about disconnect/revoke.
 

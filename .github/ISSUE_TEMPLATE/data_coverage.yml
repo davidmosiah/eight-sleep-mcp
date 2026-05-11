@@ -1,14 +1,14 @@
 name: Data coverage request
-description: Request support for more official WHOOP API data
+description: Request support for more official Eight Sleep API data
 labels: [enhancement, data coverage]
 body:
   - type: markdown
     attributes:
-      value: "Requests should point to official WHOOP API docs when possible. This project does not use private/internal WHOOP APIs."
+      value: "Requests should point to official Eight Sleep API docs when possible. This project does not use private/internal Eight Sleep APIs."
   - type: input
     id: endpoint
     attributes:
-      label: Official WHOOP API endpoint or doc URL
+      label: Official Eight Sleep API endpoint or doc URL
       placeholder: https://developer.whoop.com/api/
   - type: textarea
     id: use_case

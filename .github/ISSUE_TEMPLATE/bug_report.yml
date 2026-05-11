@@ -1,10 +1,10 @@
 name: Bug report
-description: Report a bug in whoop-mcp-server
+description: Report a bug in eight-sleep-mcp-server
 labels: [bug]
 body:
   - type: markdown
     attributes:
-      value: "Do not paste WHOOP tokens, client secrets, or raw personal health exports."
+      value: "Do not paste Eight Sleep tokens, client secrets, or raw personal health exports."
   - type: textarea
     id: problem
     attributes:
