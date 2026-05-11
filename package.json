@@ -70,8 +70,7 @@
   "homepage": "https://wellness.delx.ai/connectors/eight-sleep",
   "mcpName": "io.github.davidmosiah/eight-sleep-mcp",
   "publishConfig": {
-    "access": "public",
-    "provenance": true
+    "access": "public"
   },
   "main": "dist/index.js"
 }
