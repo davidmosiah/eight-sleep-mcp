@@ -27,8 +27,8 @@ export function buildDataInventory() {
     first_tools: [
       "eight_sleep_connection_status",
       "eight_sleep_get_me",
-      "eight_sleep_get_temperature",
-      "eight_sleep_get_alarms"
+      "eight_sleep_nightly_summary",
+      "eight_sleep_wellness_context"
     ],
     recommended_agent_flow: capabilities.recommended_agent_flow,
     links: capabilities.links,

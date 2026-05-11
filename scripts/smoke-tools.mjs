@@ -20,11 +20,13 @@ const expectedTools = [
   'eight_sleep_get_trends',
   'eight_sleep_get_user',
   'eight_sleep_logout',
+  'eight_sleep_nightly_summary',
   'eight_sleep_privacy_audit',
   'eight_sleep_set_away_mode',
   'eight_sleep_set_side',
   'eight_sleep_set_temperature',
-  'eight_sleep_snooze_alarm'
+  'eight_sleep_snooze_alarm',
+  'eight_sleep_wellness_context'
 ];
 
 const expectedResources = [

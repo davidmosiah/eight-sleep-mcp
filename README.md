@@ -99,6 +99,13 @@ This package talks to the Eight Sleep mobile-app API. It does **not** access con
 | Alarms | `eight_sleep_get_alarms` | `app-api.8slp.net /v2/users/{id}/alarms` |
 | Adjustable base | `eight_sleep_get_base` | `app-api.8slp.net /v1/users/{id}/base` |
 
+### Workflow tools
+
+| Tool | What it does |
+|------|------|
+| `eight_sleep_nightly_summary` | Multi-night summary: best night, worst night, mean score, nights under 70 / over 85 — one call instead of post-processing raw `get_trends`. |
+| `eight_sleep_wellness_context` | Returns a normalized `delx-wellness-context/v1` payload so other Delx Wellness tools (Nourish, Exercise Catalog, Telegram coaches) can read sleep context without knowing the Eight Sleep API. |
+
 ## Mutation tools (write gate)
 
 Off by default. To enable, re-run setup with `--allow-mutations` or set `EIGHT_SLEEP_ALLOW_MUTATIONS=true`.

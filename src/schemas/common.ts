@@ -208,6 +208,52 @@ export const ConnectionStatusOutputSchema = z.object({
   next_steps: z.array(z.string())
 }).strict();
 
+export const WellnessContextInputSchema = z.object({
+  days: z.number().int().min(1).max(30).default(7)
+    .describe("Lookback window in days for Eight Sleep trends."),
+  timezone: z.string().min(1).max(80).default("UTC")
+    .describe("IANA timezone used by the Eight Sleep API."),
+  soreness: z.array(z.string().min(1).max(80)).default([]),
+  injury_flags: z.array(z.string().min(1).max(120)).default([]),
+  notes: z.string().max(500).optional(),
+  response_format: ResponseFormatSchema
+}).strict();
+
+export const WellnessContextOutputSchema = z.object({
+  source: z.literal("eight-sleep"),
+  context_contract_version: z.literal("delx-wellness-context/v1"),
+  context_type: z.literal("wellness_context"),
+  generated_at: z.string(),
+  window: z.object({
+    from: z.string(),
+    to: z.string(),
+    days_returned: z.number().int().nonnegative(),
+    days_requested: z.number().int().nonnegative(),
+    timezone: z.string()
+  }).strict(),
+  recovery_score: z.number().min(0).max(100).optional(),
+  sleep_score: z.number().min(0).max(100).optional(),
+  strain_score: z.number().min(0).max(30).optional(),
+  recent_training_load: z.enum(["low", "normal", "high", "unknown"]),
+  soreness: z.array(z.string()),
+  injury_flags: z.array(z.string()),
+  notes: z.array(z.string()),
+  data_quality: z.unknown().optional(),
+  recommended_handoff: z.object({ tool: z.string(), reason: z.string() }).strict(),
+  telegram_summary: z.string().optional()
+}).strict();
+
+export const NightlySummaryInputSchema = z.object({
+  days: z.number().int().min(1).max(30).default(7),
+  timezone: z.string().min(1).max(80).default("UTC"),
+  response_format: ResponseFormatSchema
+}).strict();
+
+export const NightlySummaryOutputSchema = z.object({
+  kind: z.literal("nightly_summary"),
+  generated_at: z.string()
+}).passthrough();
+
 export const DataInventoryOutputSchema = z.object({
   kind: z.literal("data_inventory"),
   source: z.string(),
@@ -242,3 +288,5 @@ export type SetTemperatureInput = z.infer<typeof SetTemperatureInputSchema>;
 export type SetSideInput = z.infer<typeof SetSideInputSchema>;
 export type SetAwayModeInput = z.infer<typeof SetAwayModeInputSchema>;
 export type AlarmActionInput = z.infer<typeof AlarmActionInputSchema>;
+export type WellnessContextInput = z.infer<typeof WellnessContextInputSchema>;
+export type NightlySummaryInput = z.infer<typeof NightlySummaryInputSchema>;

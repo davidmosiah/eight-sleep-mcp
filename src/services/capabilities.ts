@@ -49,7 +49,7 @@ export function buildCapabilities() {
       {
         name: "Sleep trends",
         examples: ["nightly sleep sessions", "score", "presence start/end", "stage breakdown", "tnt (tosses-and-turns)"],
-        tools: ["eight_sleep_get_trends"]
+        tools: ["eight_sleep_get_trends", "eight_sleep_nightly_summary", "eight_sleep_wellness_context"]
       },
       {
         name: "Adjustable base",
@@ -68,7 +68,8 @@ export function buildCapabilities() {
       "Call eight_sleep_agent_manifest when installing or operating inside a server agent such as Hermes.",
       "Call eight_sleep_connection_status before any data tool.",
       "If setup is incomplete, guide the user through `eight-sleep-mcp-server setup`.",
-      "Prefer eight_sleep_get_me to discover userId before specific user-scoped calls.",
+      "Prefer eight_sleep_nightly_summary or eight_sleep_wellness_context over raw eight_sleep_get_trends.",
+      "Use eight_sleep_wellness_context to hand sleep context to nourish / exercise-catalog / Telegram coaches.",
       "Mutations need explicit user intent AND EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
       "Use privacy_mode=raw only when the user explicitly asks for the full payload.",
       "Frame outputs as sleep/temperature context, never as medical diagnosis."

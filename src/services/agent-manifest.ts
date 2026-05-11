@@ -10,7 +10,9 @@ export const HERMES_DIRECT_TOOLS = [
   "mcp_eight_sleep_eight_sleep_get_me",
   "mcp_eight_sleep_eight_sleep_get_temperature",
   "mcp_eight_sleep_eight_sleep_get_alarms",
-  "mcp_eight_sleep_eight_sleep_get_trends"
+  "mcp_eight_sleep_eight_sleep_get_trends",
+  "mcp_eight_sleep_eight_sleep_nightly_summary",
+  "mcp_eight_sleep_eight_sleep_wellness_context"
 ];
 
 const STANDARD_TOOLS = [
@@ -27,7 +29,9 @@ const STANDARD_TOOLS = [
   "eight_sleep_get_trends",
   "eight_sleep_get_user",
   "eight_sleep_logout",
-  "eight_sleep_privacy_audit"
+  "eight_sleep_nightly_summary",
+  "eight_sleep_privacy_audit",
+  "eight_sleep_wellness_context"
 ];
 
 const MUTATION_TOOLS = [
@@ -66,8 +70,8 @@ export function buildAgentManifest(client: AgentClientName = "generic") {
       "eight_sleep_connection_status",
       "eight_sleep_data_inventory",
       "eight_sleep_get_me",
-      "eight_sleep_get_temperature",
-      "eight_sleep_get_alarms"
+      "eight_sleep_nightly_summary",
+      "eight_sleep_wellness_context"
     ],
     standard_tools: STANDARD_TOOLS,
     mutation_tools: MUTATION_TOOLS,

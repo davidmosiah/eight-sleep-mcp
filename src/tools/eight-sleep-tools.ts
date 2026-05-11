@@ -11,6 +11,8 @@ import {
   EndpointDataOutputSchema,
   LogoutOutputSchema,
   MutationOutputSchema,
+  NightlySummaryInputSchema,
+  NightlySummaryOutputSchema,
   PrivacyAuditOutputSchema,
   ResponseOnlyInputSchema,
   SetAwayModeInputSchema,
@@ -18,7 +20,9 @@ import {
   SetTemperatureInputSchema,
   SimpleReadInputSchema,
   TrendsInputSchema,
-  UserIdInputSchema
+  UserIdInputSchema,
+  WellnessContextInputSchema,
+  WellnessContextOutputSchema
 } from "../schemas/common.js";
 import { buildAgentManifest, formatAgentManifestMarkdown } from "../services/agent-manifest.js";
 import { buildPrivacyAudit } from "../services/audit.js";
@@ -29,6 +33,12 @@ import { EightSleepClient } from "../services/eight-sleep-client.js";
 import { bulletList, makeError, makeResponse } from "../services/format.js";
 import { buildDataInventory, formatInventoryMarkdown } from "../services/inventory.js";
 import { applyPrivacy, resolvePrivacyMode } from "../services/privacy.js";
+import {
+  buildNightlySummary,
+  buildWellnessContext,
+  formatNightlySummaryMarkdown,
+  formatWellnessContextMarkdown
+} from "../services/wellness-context.js";
 
 function client(): EightSleepClient {
   return new EightSleepClient(getConfig());
@@ -355,6 +365,54 @@ export function registerEightSleepTools(server: McpServer): void {
           }
         }), privacyMode);
         return makeResponse({ endpoint, privacy_mode: privacyMode, data }, response_format, bulletList("Eight Sleep Trends", { endpoint, from_date, to_date, timezone }));
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
+  // ------------------------------ workflows ------------------------------
+
+  server.registerTool(
+    "eight_sleep_wellness_context",
+    {
+      title: "Eight Sleep Wellness Context",
+      description: "Build a normalized `delx-wellness-context/v1` payload from recent Eight Sleep trends so other Delx Wellness tools (nourish, exercise catalog, Telegram coaches) can read sleep context without knowing the Eight Sleep API.",
+      inputSchema: WellnessContextInputSchema.shape,
+      outputSchema: WellnessContextOutputSchema.shape,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+    },
+    async (params) => {
+      try {
+        const c = client();
+        const context = await buildWellnessContext(c, {
+          days: params.days,
+          timezone: params.timezone,
+          soreness: params.soreness,
+          injury_flags: params.injury_flags,
+          notes: params.notes
+        });
+        return makeResponse(context, params.response_format, formatWellnessContextMarkdown(context));
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
+  server.registerTool(
+    "eight_sleep_nightly_summary",
+    {
+      title: "Eight Sleep Nightly Summary",
+      description: "Compute a multi-night sleep summary (best night, worst night, mean score, nights under 70 / over 85) from Eight Sleep trend data. One call replaces post-processing raw `get_trends`.",
+      inputSchema: NightlySummaryInputSchema.shape,
+      outputSchema: NightlySummaryOutputSchema,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+    },
+    async (params) => {
+      try {
+        const c = client();
+        const summary = await buildNightlySummary(c, { days: params.days, timezone: params.timezone });
+        return makeResponse(summary, params.response_format, formatNightlySummaryMarkdown(summary));
       } catch (error) {
         return makeError((error as Error).message);
       }
