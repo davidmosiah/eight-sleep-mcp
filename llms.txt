@@ -1,0 +1,17 @@
+# Eight Sleep MCP
+Unofficial MCP server for connecting AI agents to the Eight Sleep mobile-app API.
+Repository: https://github.com/davidmosiah/eight-sleep-mcp
+Homepage: https://wellness.delx.ai/connectors/eight-sleep
+NPM: https://www.npmjs.com/package/eight-sleep-mcp-unofficial
+Primary command: npm exec --yes --package=eight-sleep-mcp-unofficial -- eight-sleep-mcp-unofficial doctor
+MCP command: eight-sleep-mcp-unofficial
+Agent surfaces:
+- MCP registry name: io.github.davidmosiah/eight-sleep-mcp
+- Start with eight_sleep_connection_status, then eight_sleep_data_inventory or eight_sleep_get_me.
+- Prefer JSON responses for automation and markdown responses for human summaries.
+- Mutation tools (set_temperature, set_side, set_away_mode, snooze/dismiss alarm) require EIGHT_SLEEP_ALLOW_MUTATIONS=true.
+Safety:
+- Do not paste account credentials, access tokens, API keys or raw private exports into chat.
+- Keep local config (~/.eight-sleep-mcp/) and generated data out of git.
+- Treat outputs as wellness context, not medical advice.
+- This connector talks to private Eight Sleep endpoints; endpoints may change without notice.

@@ -1,0 +1,11 @@
+
+coverage/
+dist/
+.DS_Store
+.eight-sleep-mcp/
+.env
+.env.*
+*.log
+# MCP Registry local auth tokens
+.mcpregistry_*_token
+node_modules/

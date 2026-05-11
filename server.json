@@ -1,0 +1,77 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.davidmosiah/eight-sleep-mcp",
+  "description": "Privacy-first, unofficial Eight Sleep MCP server for AI agents that read sleep trends, temperature, and alarms — and optionally control the pod under a mutation gate.",
+  "repository": {
+    "url": "https://github.com/davidmosiah/eight-sleep-mcp",
+    "source": "github"
+  },
+  "version": "0.1.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "eight-sleep-mcp-unofficial",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" },
+      "environmentVariables": [
+        {
+          "name": "EIGHT_SLEEP_EMAIL",
+          "description": "Eight Sleep account email. Optional when configured with eight-sleep-mcp-server setup.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "EIGHT_SLEEP_PASSWORD",
+          "description": "Eight Sleep account password. Prefer the setup command so this secret is stored in ~/.eight-sleep-mcp/config.json (chmod 600) instead of MCP client config.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true
+        },
+        {
+          "name": "EIGHT_SLEEP_ALLOW_MUTATIONS",
+          "description": "Set to true to enable write tools (set_temperature, set_side, set_away_mode, snooze/dismiss alarm). Default false (read-only).",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "EIGHT_SLEEP_PRIVACY_MODE",
+          "description": "Optional payload mode: summary, structured, or raw. Defaults to structured.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "EIGHT_SLEEP_CACHE",
+          "description": "Optional SQLite cache toggle. Set to true or sqlite to enable.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "EIGHT_SLEEP_TOKEN_PATH",
+          "description": "Optional local token path. Defaults to ~/.eight-sleep-mcp/tokens.json.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "EIGHT_SLEEP_CLIENT_ID",
+          "description": "Optional override for the Android-app client_id default.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        },
+        {
+          "name": "EIGHT_SLEEP_CLIENT_SECRET",
+          "description": "Optional override for the Android-app client_secret default.",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": true
+        }
+      ]
+    }
+  ],
+  "websiteUrl": "https://wellness.delx.ai/connectors/eight-sleep"
+}
