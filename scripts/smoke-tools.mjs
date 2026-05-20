@@ -12,6 +12,7 @@ const expectedTools = [
   'eight_sleep_connection_status',
   'eight_sleep_data_inventory',
   'eight_sleep_dismiss_alarm',
+  'eight_sleep_efficiency',
   'eight_sleep_get_alarms',
   'eight_sleep_get_base',
   'eight_sleep_get_current_device',

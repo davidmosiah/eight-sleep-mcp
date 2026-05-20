@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.2 - 2026-05-20
+
+### Added
+
+- **`eight_sleep_efficiency` workflow MCP tool.** Per-night sleep efficiency from the existing `/v1/users/{id}/trends` payload — no extra API calls. For each of the last N nights (default 7, max 30) returns:
+  - `time_in_bed_minutes` (from `presenceDuration`)
+  - `time_asleep_minutes` (from `sleepDuration`)
+  - `awakenings_count` (approximated from `tnt` when surfaced by upstream; otherwise undefined with an explanatory note)
+  - `efficiency_pct = round((time_asleep / time_in_bed) * 100)`
+  - `efficiency_band`: `"excellent"` (≥85%), `"good"` (75-84%), `"fair"` (65-74%), `"poor"` (<65%)
+- Aggregates: `nights_analyzed`, `mean_efficiency_pct`, `median_efficiency_pct`, `min_efficiency_night`, `max_efficiency_night`, `nights_by_band` (excellent/good/fair/poor counts), `per_night` array.
+- `observations[]` only when supported by the data: a mid-week drop (first-half mean - second-half mean ≥ 10), all-nights-same-band ("All N nights in 'good' band — solid baseline"), or a single-night dip ≥ 15 points below the window mean. Never invented.
+- Graceful degradation: when the upstream trends payload omits `presenceDuration` / `sleepDuration` for every night, `nights_analyzed: 0` is returned with a `note` explaining the gap. When some nights are missing those fields, they appear in `per_night` (without efficiency) and are excluded from aggregates — a note explains the partial coverage.
+- New `src/services/sleep-efficiency.ts` module exporting `analyzeSleepEfficiency()` (pure), `buildSleepEfficiency()` (IO + delegate), `formatSleepEfficiencyMarkdown()` (renderer), and the `bandFor()` helper.
+- New `SleepEfficiencyInputSchema` in `src/schemas/common.ts` (`nights` 1-30, `timezone` IANA, `response_format`).
+- New `scripts/test-sleep-efficiency.mjs` synthetic-data unit test wired into `npm test`. Covers: bandFor boundaries, empty payload, missing-fields graceful degradation, 7-night mixed window with deterministic efficiencies, all-band-same observation, single-night dip observation, partial-night mixed coverage, and tnt → awakenings_count passthrough.
+- Tool count: 25 → 26. Added to STANDARD_TOOLS in agent-manifest and smoke expectedTools.
+
 ## 0.2.1 - 2026-05-19
 
 ### Added

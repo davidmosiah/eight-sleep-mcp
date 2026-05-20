@@ -1,5 +1,5 @@
 export const SERVER_NAME = "eight-sleep-mcp-server";
-export const SERVER_VERSION = "0.2.1";
+export const SERVER_VERSION = "0.2.2";
 export const NPM_PACKAGE_NAME = "eight-sleep-mcp-unofficial";
 export const PINNED_NPM_PACKAGE = `${NPM_PACKAGE_NAME}@${SERVER_VERSION}`;
 

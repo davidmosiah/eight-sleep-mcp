@@ -21,6 +21,7 @@ import {
   SetSideInputSchema,
   SetTemperatureInputSchema,
   SimpleReadInputSchema,
+  SleepEfficiencyInputSchema,
   TemperatureTrendInputSchema,
   TrendsInputSchema,
   UserIdInputSchema,
@@ -55,6 +56,10 @@ import {
   buildTemperatureTrend,
   formatTemperatureTrendMarkdown
 } from "../services/temperature-trend.js";
+import {
+  buildSleepEfficiency,
+  formatSleepEfficiencyMarkdown
+} from "../services/sleep-efficiency.js";
 
 function client(): EightSleepClient {
   return new EightSleepClient(getConfig());
@@ -549,6 +554,25 @@ export function registerEightSleepTools(server: McpServer): void {
         const c = client();
         const trend = await buildTemperatureTrend(c, { days: params.days, timezone: params.timezone });
         return makeResponse(trend, params.response_format, formatTemperatureTrendMarkdown(trend));
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
+  server.registerTool(
+    "eight_sleep_efficiency",
+    {
+      title: "Eight Sleep Sleep Efficiency",
+      description: "v0.2.2 — Sleep efficiency calculator. For each of the last N nights (default 7), computes time_in_bed_minutes (from presenceDuration), time_asleep_minutes (from sleepDuration), efficiency_pct = (asleep / in_bed) * 100, and efficiency_band (excellent ≥85, good 75-84, fair 65-74, poor <65). Returns nights_analyzed, mean / median / min-night / max-night efficiency, a nights_by_band breakdown, per_night array, and natural-language observations (mid-week drop, all-nights-same-band, single-night dip > 15 points below mean) ONLY when supported by the data. Reuses the existing /v1/users/{id}/trends payload — no extra API calls. Graceful degradation when upstream omits presenceDuration / sleepDuration (returns nights_analyzed: 0 with a clarifying note).",
+      inputSchema: SleepEfficiencyInputSchema.shape,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+    },
+    async (params) => {
+      try {
+        const c = client();
+        const eff = await buildSleepEfficiency(c, { nights: params.nights, timezone: params.timezone });
+        return makeResponse(eff, params.response_format, formatSleepEfficiencyMarkdown(eff));
       } catch (error) {
         return makeError((error as Error).message);
       }
