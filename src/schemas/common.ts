@@ -249,6 +249,17 @@ export const NightlySummaryInputSchema = z.object({
   response_format: ResponseFormatSchema
 }).strict();
 
+/** Input schema for eight_sleep_temperature_trend (v0.2.1). */
+export const TemperatureTrendInputSchema = z.object({
+  days: z.number().int().min(1).max(30).default(7).describe(
+    "Number of recent nights to summarize. Default 7."
+  ),
+  timezone: z.string().min(1).max(80).default("UTC").describe(
+    "IANA timezone for grouping nightly records. Default UTC."
+  ),
+  response_format: ResponseFormatSchema
+}).strict();
+
 // ---------------------- shared Delx Wellness profile ----------------------
 
 const ExplicitUserIntentSchema = z

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.1 - 2026-05-19
+
+### Added
+
+- **`eight_sleep_temperature_trend` workflow MCP tool.** Aggregates the current smart-temperature schedule with the last N nights of trends data and returns:
+  - `nights_analyzed`, `mean_bedtime`, `mean_wake`, `mean_delta` (wake - bedtime)
+  - `bedtime_stats` and `wake_stats` (mean / median / min / max / most_common / count)
+  - `weekend_vs_weekday` (weekend mean vs weekday mean + delta), computed by UTC day-of-week
+  - `coldest_night` / `warmest_night` (by bedtime level), each `{ day, bedtime_level }`
+  - `consistency_score` (0-100; 100 = identical bedtime settings every night, 0 = wildly variable)
+  - `observations` — natural-language array; only populated when the data supports specific findings (e.g. "Bedtime settings 5 levels warmer on weekends than weekdays.", "Bedtime level dropped from 0 to -20 over the last 5 nights.", "Morning warm-up effectively disabled on 4 of last 5 nights."). Never invented.
+  - `correlation_note` (bedtime vs sleep score, Pearson r) only when 3+ paired nights support |r| >= 0.5; otherwise omitted.
+  Reuses `get_temperature` (current state) + `get_trends` (historical scores) internally — no extra API calls beyond what those tools already issue. When the trends payload does not expose per-night bedtime/wake levels (varies by firmware), aggregates degrade gracefully and `notes` explains the gap. Empty trend windows return `nights_analyzed: 0` with all aggregates undefined — no crash.
+- New `src/services/temperature-trend.ts` module with three exported functions: `analyzeTemperatureTrend()` (pure, testable with synthetic data), `buildTemperatureTrend()` (does the IO + delegates), and `formatTemperatureTrendMarkdown()` (renderer). Helpers `consistencyScore()` and `isWeekendDay()` also exported.
+- New `TemperatureTrendInputSchema` in `src/schemas/common.ts` (`days` 1-30, `timezone` IANA, `response_format`).
+- New `scripts/test-temperature-trend.mjs` synthetic-data unit test wired into `npm test`. Covers: weekend detection, consistency scoring (identical / mild / wild), empty input (`nights_analyzed: 0`, no crash), scores-only payload (graceful degradation), full 7-night window (means / delta / coldest / warmest / weekend-vs-weekday observation), trending-colder pattern, and disabled-warmup detection.
+- Tool count: 24 → 25. Added to STANDARD_TOOLS in agent-manifest and smoke expectedTools.
+
 ## 0.2.0 - 2026-05-11
 
 ### Added

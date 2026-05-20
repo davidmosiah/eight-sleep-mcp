@@ -29,6 +29,7 @@ const expectedTools = [
   'eight_sleep_set_side',
   'eight_sleep_set_temperature',
   'eight_sleep_snooze_alarm',
+  'eight_sleep_temperature_trend',
   'eight_sleep_wellness_context'
 ];
 

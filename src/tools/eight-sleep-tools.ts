@@ -21,6 +21,7 @@ import {
   SetSideInputSchema,
   SetTemperatureInputSchema,
   SimpleReadInputSchema,
+  TemperatureTrendInputSchema,
   TrendsInputSchema,
   UserIdInputSchema,
   WellnessContextInputSchema,
@@ -50,6 +51,10 @@ import {
   formatNightlySummaryMarkdown,
   formatWellnessContextMarkdown
 } from "../services/wellness-context.js";
+import {
+  buildTemperatureTrend,
+  formatTemperatureTrendMarkdown
+} from "../services/temperature-trend.js";
 
 function client(): EightSleepClient {
   return new EightSleepClient(getConfig());
@@ -525,6 +530,25 @@ export function registerEightSleepTools(server: McpServer): void {
         const c = client();
         const summary = await buildNightlySummary(c, { days: params.days, timezone: params.timezone });
         return makeResponse(summary, params.response_format, formatNightlySummaryMarkdown(summary));
+      } catch (error) {
+        return makeError((error as Error).message);
+      }
+    }
+  );
+
+  server.registerTool(
+    "eight_sleep_temperature_trend",
+    {
+      title: "Eight Sleep Temperature Trend",
+      description: "Workflow tool: returns the current smart-temperature schedule (bedtime/initial/final level), per-night sleep scores for the last N nights, mean/median/range/most-common for bedtime AND wake temperature settings when the trends payload exposes them, and a correlation note (e.g. 'colder bedtime → higher sleep score') ONLY when 3+ paired nights support |r| >= 0.5. Reuses get_temperature + get_trends data — no extra API calls.",
+      inputSchema: TemperatureTrendInputSchema.shape,
+      annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: true }
+    },
+    async (params) => {
+      try {
+        const c = client();
+        const trend = await buildTemperatureTrend(c, { days: params.days, timezone: params.timezone });
+        return makeResponse(trend, params.response_format, formatTemperatureTrendMarkdown(trend));
       } catch (error) {
         return makeError((error as Error).message);
       }

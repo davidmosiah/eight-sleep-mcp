@@ -34,6 +34,7 @@ const STANDARD_TOOLS = [
   "eight_sleep_privacy_audit",
   "eight_sleep_profile_get",
   "eight_sleep_profile_update",
+  "eight_sleep_temperature_trend",
   "eight_sleep_wellness_context"
 ];
 
