@@ -155,6 +155,14 @@ Eight Sleep changes mobile-app endpoints without notice. This connector tracks u
 - [`steipete/eightctl`](https://github.com/steipete/eightctl) — CLI variant with extracted client credentials.
 - [`LiamSnow/opensleep`](https://github.com/LiamSnow/opensleep) — full open-source firmware (deeper than this MCP goes).
 
+## 📧 Contact & Support
+
+- 📨 **support@delx.ai** — general questions, integration help, partnerships
+- 🐛 **Bug reports / feature requests** — [GitHub Issues](https://github.com/davidmosiah/eight-sleep-mcp/issues)
+- 🐦 **Updates** — [@delx369](https://x.com/delx369) on X
+- 🌐 **Site** — [wellness.delx.ai](https://wellness.delx.ai)
+
+
 ## License
 
 MIT &mdash; see [LICENSE](LICENSE).
