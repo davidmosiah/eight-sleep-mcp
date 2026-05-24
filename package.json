@@ -1,6 +1,6 @@
 {
   "name": "eight-sleep-mcp-unofficial",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Unofficial MCP server for connecting AI agents to the Eight Sleep mobile-app API (sleep trends, temperature, alarms, base).",
   "type": "module",
   "bin": {
