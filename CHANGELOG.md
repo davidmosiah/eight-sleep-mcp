@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.6 - 2026-07-16
+
+### Fixed
+
+- Validate real `from` / `to` calendar dates, range order and IANA timezone names for trend requests before authentication or HTTP.
+- Add executable endpoint, structured-privacy and summary-propagation contracts for the private Eight Sleep API boundary.
+- Confirm structured mode preserves future upstream sleep fields while redacting device and account identifiers.
+- Raise the transitive Hono override to 4.12.30 so production dependencies pass `npm audit --omit=dev` with zero known vulnerabilities.
+
 ## 0.2.2 - 2026-05-20
 
 ### Added

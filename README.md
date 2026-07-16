@@ -127,8 +127,10 @@ When the gate is off, mutation tools return an explicit `mutations disabled` err
 - Sensitive fields (email, device serial, shipping address, payment last-four) are redacted from tool responses by default.
 - `EIGHT_SLEEP_PRIVACY_MODE`:
   - `summary` — minimal fields only.
-  - `structured` (default) — keeps useful fields but redacts identifiers.
+  - `structured` (default) — preserves complete nested sleep fields and future upstream additions while redacting identifiers.
   - `raw` — full upstream payload (debugging only).
+
+Trend requests validate real `YYYY-MM-DD` dates, range order and IANA timezone names before any network call.
 
 Call `eight_sleep_privacy_audit` at any time to inspect the current posture without exposing secrets.
 

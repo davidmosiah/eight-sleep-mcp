@@ -65,6 +65,7 @@ export class EightSleepClient {
   }
 
   private async request(method: HttpMethod, path: string, options: RequestOptions): Promise<unknown> {
+    validateRequestBoundary(path, options);
     const token = await this.getValidToken(false);
     const url = this.buildUrl(path, options);
     const response = await this.fetchWithRetry(url, this.requestInit(method, token, options));
@@ -203,6 +204,34 @@ export class EightSleepClient {
     }
     throw new Error("Unreachable retry loop state");
   }
+}
+
+function validateRequestBoundary(path: string, options: RequestOptions): void {
+  if (!path.endsWith("/trends")) return;
+  const from = validateCivilDate(options.params?.from, "from");
+  const to = validateCivilDate(options.params?.to, "to");
+  if (from > to) throw new Error("Eight Sleep trends from date must not be later than to date");
+
+  const timezone = options.params?.tz;
+  if (typeof timezone !== "string" || !timezone) {
+    throw new Error("Invalid Eight Sleep timezone: a valid IANA timezone is required");
+  }
+  try {
+    new Intl.DateTimeFormat("en-US", { timeZone: timezone }).format(new Date(0));
+  } catch {
+    throw new Error(`Invalid Eight Sleep timezone: ${timezone}`);
+  }
+}
+
+function validateCivilDate(value: unknown, field: "from" | "to"): string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new Error(`Invalid Eight Sleep ${field} date: expected YYYY-MM-DD`);
+  }
+  const parsed = new Date(`${value}T00:00:00Z`);
+  if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== value) {
+    throw new Error(`Invalid Eight Sleep ${field} date: ${value}`);
+  }
+  return value;
 }
 
 function safeJson(text: string): unknown {
