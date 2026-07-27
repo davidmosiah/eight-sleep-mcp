@@ -82,7 +82,7 @@
   "overrides": {
     "qs": "6.15.2",
     "hono": "4.12.30",
-    "fast-uri": "3.1.2",
+    "fast-uri": "3.1.4",
     "ip-address": "10.2.0"
   }
 }
