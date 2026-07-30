@@ -1,5 +1,12 @@
 ## 0.2.7 - 2026-07-30
 
+
+## 0.2.8 - 2026-07-30
+
+### Security
+
+- Security: pod mutations require explicit_user_intent in addition to EIGHT_SLEEP_ALLOW_MUTATIONS.
+
 ### Fixed
 
 - `eight_sleep_logout` requires `explicit_user_intent` (schema + description gate) so agents cannot wipe local tokens without consent; not gated by `EIGHT_SLEEP_ALLOW_MUTATIONS`.

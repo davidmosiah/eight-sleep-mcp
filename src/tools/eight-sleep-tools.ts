@@ -83,6 +83,14 @@ function requireMutations(): void {
   }
 }
 
+function requireExplicitIntent(explicit_user_intent: boolean | undefined): void {
+  if (explicit_user_intent !== true) {
+    throw new Error(
+      "USER_ACTION_REQUIRED: explicit_user_intent must be true for this mutation. Confirm with the user first (and keep EIGHT_SLEEP_ALLOW_MUTATIONS=true)."
+    );
+  }
+}
+
 export function registerEightSleepTools(server: McpServer): void {
   // ------------------------- shared profile ------------------------
 
@@ -592,13 +600,14 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_set_temperature",
     {
       title: "Set Eight Sleep Temperature Level",
-      description: "Set the heating level (-100 .. 100). Optionally set a duration in seconds. Requires EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
+      description: "Set the heating level (-100 .. 100). Optionally set a duration in seconds. Gated by explicit_user_intent: true and EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
       inputSchema: SetTemperatureInputSchema.shape,
       outputSchema: MutationOutputSchema.shape,
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async ({ user_id, level, duration_seconds, response_format }) => {
+    async ({ user_id, level, duration_seconds, explicit_user_intent, response_format }) => {
       try {
+        requireExplicitIntent(explicit_user_intent);
         requireMutations();
         const c = client();
         const userId = await resolveUserId(c, user_id);
@@ -617,13 +626,14 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_set_side",
     {
       title: "Set Eight Sleep Side On/Off",
-      description: "Turn the user's bed side on or off. Requires EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
+      description: "Turn the user's bed side on or off. Gated by explicit_user_intent: true and EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
       inputSchema: SetSideInputSchema.shape,
       outputSchema: MutationOutputSchema.shape,
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async ({ user_id, is_on, response_format }) => {
+    async ({ user_id, is_on, explicit_user_intent, response_format }) => {
       try {
+        requireExplicitIntent(explicit_user_intent);
         requireMutations();
         const c = client();
         const userId = await resolveUserId(c, user_id);
@@ -640,13 +650,14 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_set_away_mode",
     {
       title: "Set Eight Sleep Away Mode",
-      description: "Toggle away mode. Requires EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
+      description: "Toggle away mode. Gated by explicit_user_intent: true and EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
       inputSchema: SetAwayModeInputSchema.shape,
       outputSchema: MutationOutputSchema.shape,
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async ({ user_id, is_away, response_format }) => {
+    async ({ user_id, is_away, explicit_user_intent, response_format }) => {
       try {
+        requireExplicitIntent(explicit_user_intent);
         requireMutations();
         const c = client();
         const userId = await resolveUserId(c, user_id);
@@ -663,13 +674,14 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_snooze_alarm",
     {
       title: "Snooze Eight Sleep Alarm",
-      description: "Snooze an actively ringing alarm. Requires EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
+      description: "Snooze an actively ringing alarm. Gated by explicit_user_intent: true and EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
       inputSchema: AlarmActionInputSchema.shape,
       outputSchema: MutationOutputSchema.shape,
       annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: true }
     },
-    async ({ user_id, alarm_id, response_format }) => {
+    async ({ user_id, alarm_id, explicit_user_intent, response_format }) => {
       try {
+        requireExplicitIntent(explicit_user_intent);
         requireMutations();
         const c = client();
         const userId = await resolveUserId(c, user_id);
@@ -686,13 +698,14 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_dismiss_alarm",
     {
       title: "Dismiss Eight Sleep Alarm",
-      description: "Dismiss an actively ringing alarm. Requires EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
+      description: "Dismiss an actively ringing alarm. Gated by explicit_user_intent: true and EIGHT_SLEEP_ALLOW_MUTATIONS=true.",
       inputSchema: AlarmActionInputSchema.shape,
       outputSchema: MutationOutputSchema.shape,
       annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: true }
     },
-    async ({ user_id, alarm_id, response_format }) => {
+    async ({ user_id, alarm_id, explicit_user_intent, response_format }) => {
       try {
+        requireExplicitIntent(explicit_user_intent);
         requireMutations();
         const c = client();
         const userId = await resolveUserId(c, user_id);

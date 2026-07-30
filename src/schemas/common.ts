@@ -42,30 +42,39 @@ export const TrendsInputSchema = z.object({
   response_format: ResponseFormatSchema
 }).strict();
 
+const MutationIntentSchema = z
+  .boolean()
+  .default(false)
+  .describe("Must be true after the user explicitly asked for this write. Combined with EIGHT_SLEEP_ALLOW_MUTATIONS=true.");
+
 export const SetTemperatureInputSchema = z.object({
   user_id: z.string().min(1).optional(),
   level: z.number().int().min(-100).max(100)
     .describe("Heating level. -100 = coldest, 0 = neutral, 100 = hottest. Eight Sleep clamps client-side."),
   duration_seconds: z.number().int().min(0).max(60 * 60 * 12).optional()
     .describe("Optional duration in seconds. Omit for persistent override."),
+  explicit_user_intent: MutationIntentSchema,
   response_format: ResponseFormatSchema
 }).strict();
 
 export const SetSideInputSchema = z.object({
   user_id: z.string().min(1).optional(),
   is_on: z.boolean().describe("Turn the side on (true) or off (false)."),
+  explicit_user_intent: MutationIntentSchema,
   response_format: ResponseFormatSchema
 }).strict();
 
 export const SetAwayModeInputSchema = z.object({
   user_id: z.string().min(1).optional(),
   is_away: z.boolean(),
+  explicit_user_intent: MutationIntentSchema,
   response_format: ResponseFormatSchema
 }).strict();
 
 export const AlarmActionInputSchema = z.object({
   user_id: z.string().min(1).optional(),
   alarm_id: z.string().min(1).describe("Eight Sleep alarm id from eight_sleep_get_alarms."),
+  explicit_user_intent: MutationIntentSchema,
   response_format: ResponseFormatSchema
 }).strict();
 
