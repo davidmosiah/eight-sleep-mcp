@@ -3,6 +3,7 @@
 ### Fixed
 
 - `eight_sleep_logout` requires `explicit_user_intent` (schema + description gate) so agents cannot wipe local tokens without consent; not gated by `EIGHT_SLEEP_ALLOW_MUTATIONS`.
+- Logout gate contract test drives `LogoutInputSchema` and the live MCP handler (omit/false → USER_ACTION_REQUIRED; true → clears local token file).
 
 
 # Changelog
