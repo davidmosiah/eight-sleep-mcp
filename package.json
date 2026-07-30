@@ -1,6 +1,6 @@
 {
   "name": "eight-sleep-mcp-unofficial",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Unofficial MCP server for connecting AI agents to the Eight Sleep mobile-app API (sleep trends, temperature, alarms, base).",
   "type": "module",
   "bin": {
@@ -27,11 +27,12 @@
     "smoke": "node scripts/smoke-tools.mjs",
     "test:temperature-trend": "node scripts/test-temperature-trend.mjs",
     "test:sleep-efficiency": "node scripts/test-sleep-efficiency.mjs",
-    "test": "npm run typecheck && npm run build && npm run smoke && npm run test:endpoint-contracts && npm run test:privacy-contracts && npm run test:summary-contracts && npm run test:temperature-trend && npm run test:sleep-efficiency",
+    "test": "npm run typecheck && npm run build && npm run smoke && npm run test:endpoint-contracts && npm run test:privacy-contracts && npm run test:summary-contracts && npm run test:temperature-trend && npm run test:sleep-efficiency && npm run test:logout-gate",
     "test:endpoint-contracts": "node scripts/endpoint-contract-test.mjs",
     "test:privacy-contracts": "node scripts/privacy-contract-test.mjs",
     "test:summary-contracts": "node scripts/summary-contract-test.mjs",
-    "prepublishOnly": "npm test"
+    "prepublishOnly": "npm test",
+    "test:logout-gate": "node scripts/test-logout-gate-description.mjs"
   },
   "keywords": [
     "mcp",

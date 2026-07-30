@@ -290,6 +290,14 @@ export const ProfileUpdateInputSchema = z
   })
   .strict();
 
+/** Local token wipe — not gated by ALLOW_MUTATIONS; requires explicit user intent. */
+export const LogoutInputSchema = z
+  .object({
+    explicit_user_intent: ExplicitUserIntentSchema,
+    response_format: ResponseFormatSchema
+  })
+  .strict();
+
 export const OnboardingInputSchema = z
   .object({
     locale: z.enum(["en", "pt-BR"]).default("en"),

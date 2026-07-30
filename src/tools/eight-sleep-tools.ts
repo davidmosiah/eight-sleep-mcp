@@ -9,6 +9,7 @@ import {
   ConnectionStatusOutputSchema,
   DataInventoryOutputSchema,
   EndpointDataOutputSchema,
+  LogoutInputSchema,
   LogoutOutputSchema,
   MutationOutputSchema,
   NightlySummaryInputSchema,
@@ -301,13 +302,19 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_logout",
     {
       title: "Eight Sleep Logout",
-      description: "Delete the local Eight Sleep token file. Use when the user explicitly wants to disconnect.",
-      inputSchema: ResponseOnlyInputSchema.shape,
+      description:
+        "Delete the local Eight Sleep token file. Gated by explicit_user_intent: true (requires explicit user intent / consent). Destructive local-only mutation — clears tokens on disk; not gated by EIGHT_SLEEP_ALLOW_MUTATIONS.",
+      inputSchema: LogoutInputSchema.shape,
       outputSchema: LogoutOutputSchema.shape,
       annotations: { readOnlyHint: false, destructiveHint: true, idempotentHint: false, openWorldHint: false }
     },
-    async ({ response_format }) => {
+    async ({ explicit_user_intent, response_format }) => {
       try {
+        if (explicit_user_intent !== true) {
+          throw new Error(
+            "USER_ACTION_REQUIRED: explicit_user_intent must be true to logout. Ask the user to confirm disconnect first."
+          );
+        }
         const result = await client().logout();
         const output = {
           ...result,

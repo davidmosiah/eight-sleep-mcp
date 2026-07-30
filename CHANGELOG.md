@@ -1,3 +1,10 @@
+## 0.2.7 - 2026-07-30
+
+### Fixed
+
+- `eight_sleep_logout` requires `explicit_user_intent` (schema + description gate) so agents cannot wipe local tokens without consent; not gated by `EIGHT_SLEEP_ALLOW_MUTATIONS`.
+
+
 # Changelog
 
 ## 0.2.6 - 2026-07-16
