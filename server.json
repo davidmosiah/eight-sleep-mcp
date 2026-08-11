@@ -6,12 +6,12 @@
     "url": "https://github.com/davidmosiah/eight-sleep-mcp",
     "source": "github"
   },
-  "version": "0.2.8",
+  "version": "0.2.9",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "eight-sleep-mcp-unofficial",
-      "version": "0.2.8",
+      "version": "0.2.9",
       "transport": {
         "type": "stdio"
       },

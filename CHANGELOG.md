@@ -15,6 +15,11 @@
 
 # Changelog
 
+## 0.2.9
+
+- Security: override `fast-uri@3.1.5` and `ip-address@10.4.0` (high transitive).
+
+
 ## 0.2.6 - 2026-07-16
 
 ### Fixed
