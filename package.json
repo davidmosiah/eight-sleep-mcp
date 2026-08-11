@@ -1,6 +1,6 @@
 {
   "name": "eight-sleep-mcp-unofficial",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Unofficial MCP server for connecting AI agents to the Eight Sleep mobile-app API (sleep trends, temperature, alarms, base).",
   "type": "module",
   "bin": {
@@ -82,10 +82,10 @@
   "main": "dist/index.js",
   "overrides": {
     "qs": "6.15.2",
-    "hono": "4.12.30",
+    "hono": "4.13.1",
     "fast-uri": "3.1.5",
     "ip-address": "10.4.0",
-    "@hono/node-server": "2.0.12",
+    "@hono/node-server": "2.1.0",
     "body-parser": "2.3.0"
   }
 }

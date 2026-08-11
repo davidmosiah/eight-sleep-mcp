@@ -15,6 +15,11 @@
 
 # Changelog
 
+## 0.2.10
+
+- Security: raise `hono` override to **4.13.1** (clears moderate MCP SDK transitive advisories); `@hono/node-server@2.1.0`.
+
+
 ## 0.2.9
 
 - Security: override `fast-uri@3.1.5` and `ip-address@10.4.0` (high transitive).
