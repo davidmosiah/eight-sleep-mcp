@@ -27,6 +27,19 @@
 
 ---
 
+## HTTP (v2 stateless)
+
+Default is **stdio**. Optional Streamable HTTP — no session id, JSON responses, loopback only:
+
+```bash
+npx -y eight-sleep-mcp-unofficial --http
+# GET  http://127.0.0.1:3000/health
+# POST http://127.0.0.1:3000/mcp   (sessionless)
+```
+
+Env: `EIGHT_SLEEP_MCP_HOST`, `EIGHT_SLEEP_MCP_PORT`, `EIGHT_SLEEP_MCP_TRANSPORT=http`.
+
+
 <!-- /delx-wellness header v2 -->
 
 **Local-first MCP server that connects AI agents to your Eight Sleep pod &mdash; sleep sessions, temperature program, alarms, adjustable base &mdash; with an explicit mutation gate for write actions.**
