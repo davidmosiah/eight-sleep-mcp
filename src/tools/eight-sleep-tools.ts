@@ -61,6 +61,7 @@ import {
   buildSleepEfficiency,
   formatSleepEfficiencyMarkdown
 } from "../services/sleep-efficiency.js";
+import { buildTrendsQueryParams } from "../services/trends-query.js";
 
 function client(): EightSleepClient {
   return new EightSleepClient(getConfig());
@@ -492,14 +493,7 @@ export function registerEightSleepTools(server: McpServer): void {
         const privacyMode = resolvePrivacyMode(getConfig(), privacy_mode);
         const data = applyPrivacy(endpoint, await c.get(endpoint, {
           base: "client",
-          params: {
-            "tz": timezone,
-            "from": from_date,
-            "to": to_date,
-            "include-main": true,
-            "include-all-sessions": true,
-            "model-version": "v2"
-          }
+          params: buildTrendsQueryParams({ timezone, from: from_date, to: to_date })
         }), privacyMode);
         return makeResponse({ endpoint, privacy_mode: privacyMode, data }, response_format, bulletList("Eight Sleep Trends", { endpoint, from_date, to_date, timezone }));
       } catch (error) {

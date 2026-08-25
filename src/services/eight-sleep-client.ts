@@ -10,6 +10,7 @@ import type { EightSleepConfig, EightSleepTokenSet } from "../types.js";
 import { EightSleepCache, disabledCacheStatus, type CacheStatus } from "./cache.js";
 import { redactErrorMessage } from "./redaction.js";
 import { TokenStore } from "./token-store.js";
+import { trendsQueryHasConflictingIncludes } from "./trends-query.js";
 
 export type ApiBase = "client" | "app";
 export type HttpMethod = "GET" | "PUT" | "POST" | "DELETE";
@@ -211,6 +212,9 @@ function validateRequestBoundary(path: string, options: RequestOptions): void {
   const from = validateCivilDate(options.params?.from, "from");
   const to = validateCivilDate(options.params?.to, "to");
   if (from > to) throw new Error("Eight Sleep trends from date must not be later than to date");
+  if (trendsQueryHasConflictingIncludes(options.params)) {
+    throw new Error("Eight Sleep trends request must include only one of include-main or include-all-sessions");
+  }
 
   const timezone = options.params?.tz;
   if (typeof timezone !== "string" || !timezone) {
