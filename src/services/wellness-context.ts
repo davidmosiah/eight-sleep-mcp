@@ -1,4 +1,5 @@
 import type { EightSleepClient } from "./eight-sleep-client.js";
+import { buildTrendsQueryParams } from "./trends-query.js";
 
 export interface WellnessContextOptions {
   days: number;
@@ -64,14 +65,7 @@ export async function fetchTrendDays(client: EightSleepClient, options: FetchTre
   const from = isoDateNDaysAgo(options.days);
   const payload = (await client.get(`/users/${token.user_id}/trends`, {
     base: "client",
-    params: {
-      "tz": options.timezone,
-      "from": from,
-      "to": to,
-      "include-main": true,
-      "include-all-sessions": true,
-      "model-version": "v2"
-    }
+    params: buildTrendsQueryParams({ timezone: options.timezone, from, to })
   })) as TrendsPayload;
   return { days: payload.days ?? [], from, to };
 }
