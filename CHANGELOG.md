@@ -1,3 +1,13 @@
+## 0.2.11 - 2026-08-26
+
+### Fixed
+
+- Trend requests no longer send both `include-main` and `include-all-sessions` (Eight Sleep HTTP 400). Shared query builder keeps `include-all-sessions` and rejects the conflicting pair before HTTP ([#6](https://github.com/davidmosiah/eight-sleep-mcp/issues/6) / [#7](https://github.com/davidmosiah/eight-sleep-mcp/pull/7)).
+
+### Changed
+
+- Hermes example no longer copy-pastes WHOOP copy onto Eight Sleep.
+
 ## 0.2.7 - 2026-07-30
 
 
