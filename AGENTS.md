@@ -2,7 +2,7 @@
 
 ## Scope
 
-This repo is the unofficial Eight Sleep MCP connector. Read tools cover sleep trends, temperature program, alarms and the adjustable base. Mutation tools (temperature, side, away mode, alarm snooze/dismiss) are gated by `EIGHT_SLEEP_ALLOW_MUTATIONS=true`.
+This repo is the unofficial Eight Sleep MCP connector. Read tools cover sleep trends, temperature program, alarms and the adjustable base. Mutation tools (temperature, side, away mode, alarm snooze/dismiss) are gated by `EIGHT_SLEEP_ALLOW_MUTATIONS` (off by default). Never enable that flag in default examples.
 
 ## Commands
 

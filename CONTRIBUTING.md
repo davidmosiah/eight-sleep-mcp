@@ -15,7 +15,7 @@ npm run smoke
 
 - Keep the project explicitly **unofficial** and unaffiliated with Eight Sleep.
 - Never commit account credentials, tokens or personal sleep exports.
-- Read-only by default. Mutations are gated by `EIGHT_SLEEP_ALLOW_MUTATIONS=true`.
+- Read-only by default. Mutations are gated by `EIGHT_SLEEP_ALLOW_MUTATIONS` (keep it unset in default examples).
 - Tools should return both text content and structured content.
 - Error messages should be actionable without revealing secrets.
 - Sleep/temperature outputs should be framed as wellness context, not medical advice.

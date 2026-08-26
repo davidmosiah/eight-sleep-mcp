@@ -1,3 +1,9 @@
+## 0.2.12 - 2026-08-26
+
+### Security
+
+- Default docs (`README`, `llms.txt`, `AGENTS.md`, examples) no longer contain a copyable `EIGHT_SLEEP_ALLOW_MUTATIONS=true` assignment. Gate stays off by default.
+
 ## 0.2.11 - 2026-08-26
 
 ### Fixed

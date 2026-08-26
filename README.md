@@ -121,7 +121,7 @@ This package talks to the Eight Sleep mobile-app API. It does **not** access con
 
 ## Mutation tools (write gate)
 
-Off by default. To enable, re-run setup with `--allow-mutations` or set `EIGHT_SLEEP_ALLOW_MUTATIONS=true`.
+Off by default. To enable, re-run setup with `--allow-mutations` or enable `EIGHT_SLEEP_ALLOW_MUTATIONS`. Do not put the assignment in default MCP snippets.
 
 | Action | Tool |
 |------|------|
@@ -153,7 +153,7 @@ Call `eight_sleep_privacy_audit` at any time to inspect the current posture with
 |-----|---------|
 | `EIGHT_SLEEP_EMAIL` | Account email. |
 | `EIGHT_SLEEP_PASSWORD` | Account password. |
-| `EIGHT_SLEEP_ALLOW_MUTATIONS` | `true` to enable write tools. |
+| `EIGHT_SLEEP_ALLOW_MUTATIONS` | Enable write tools (keep unset in default snippets). |
 | `EIGHT_SLEEP_PRIVACY_MODE` | `summary` / `structured` / `raw`. |
 | `EIGHT_SLEEP_CACHE` | `sqlite` to enable on-disk response cache. |
 | `EIGHT_SLEEP_TOKEN_PATH` | Override token storage path. |
