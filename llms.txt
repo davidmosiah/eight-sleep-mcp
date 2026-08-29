@@ -15,3 +15,6 @@ Safety:
 - Keep local config (~/.eight-sleep-mcp/) and generated data out of git.
 - Treat outputs as wellness context, not medical advice.
 - This connector talks to private Eight Sleep endpoints; endpoints may change without notice.
+
+Skill (same gates, no MCP client required): skill/SKILL.md
+npx -y eight-sleep-mcp-unofficial call <tool> --json '{...}'

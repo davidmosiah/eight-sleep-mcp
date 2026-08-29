@@ -9,12 +9,14 @@ import {
 } from "../services/profile-store.js";
 import { runAuthCommand } from "./auth.js";
 import { runSetupCommand } from "./setup.js";
+import { runToolCall } from "./tool-calls.js";
 
 export async function runCliCommand(args: string[]): Promise<number | undefined> {
   const [command, ...rest] = args;
   if (!command || command === "--http") return undefined;
   if (command === "setup") return runSetupCommand(rest);
   if (command === "doctor" || command === "status") return runDoctor(rest);
+  if (command === "call") return runToolCall(rest);
   if (command === "login" || command === "auth") return runAuthCommand(rest);
   if (command === "onboarding") return runOnboardingCommand(rest);
   if (command === "version" || command === "--version" || command === "-v") {
@@ -139,6 +141,8 @@ Usage:
 Required env (or use setup):
   EIGHT_SLEEP_EMAIL
   EIGHT_SLEEP_PASSWORD
+
+  call <tool> [--json '{...}']   same tools as MCP (skill path)
 
 Optional env:
   EIGHT_SLEEP_ALLOW_MUTATIONS=true   Enable write tools (set_temperature, set_side, alarms, away)

@@ -181,3 +181,13 @@ Eight Sleep changes mobile-app endpoints without notice. This connector tracks u
 ## License
 
 MIT &mdash; see [LICENSE](LICENSE).
+
+## Skill or MCP
+
+Same package, two doors. MCP registers tools on stdio/HTTP. The [skill](skill/SKILL.md) can drive the **same** tools through the CLI when the client has no MCP:
+
+```bash
+npx -y eight-sleep-mcp-unofficial call eight_sleep_connection_status --json '{}'
+```
+
+Copy `skill/SKILL.md` into your agent skills dir.
