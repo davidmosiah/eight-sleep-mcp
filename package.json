@@ -28,7 +28,7 @@
     "smoke": "node scripts/smoke-tools.mjs",
     "test:temperature-trend": "node scripts/test-temperature-trend.mjs",
     "test:sleep-efficiency": "node scripts/test-sleep-efficiency.mjs",
-    "test": "npm run typecheck && npm run build && npm run smoke && npm run test:endpoint-contracts && npm run test:privacy-contracts && npm run test:summary-contracts && npm run test:temperature-trend && npm run test:sleep-efficiency && npm run test:logout-gate && npm run test:secret-scan && npm run test:skill-surface && npm run test:cache-disabled && npm run test:input-limits && npm run test:profile-boundaries && npm run test:profile-storage",
+    "test": "npm run typecheck && npm run build && npm run smoke && npm run test:endpoint-contracts && npm run test:privacy-contracts && npm run test:summary-contracts && npm run test:temperature-trend && npm run test:sleep-efficiency && npm run test:logout-gate && npm run test:secret-scan && npm run test:skill-surface && npm run test:cache-disabled && npm run test:input-limits && npm run test:profile-boundaries && npm run test:profile-storage && npm run test:http-local-only",
     "test:secret-scan": "node scripts/test-secret-scan.mjs",
     "test:endpoint-contracts": "node scripts/endpoint-contract-test.mjs",
     "test:privacy-contracts": "node scripts/privacy-contract-test.mjs",
@@ -39,7 +39,8 @@
     "test:cache-disabled": "node scripts/test-cache-disabled.mjs",
     "test:input-limits": "node scripts/input-limits-test.mjs",
     "test:profile-boundaries": "node scripts/test-profile-boundaries.mjs",
-    "test:profile-storage": "node scripts/test-profile-storage.mjs"
+    "test:profile-storage": "node scripts/test-profile-storage.mjs",
+    "test:http-local-only": "node scripts/test-http-local-only.mjs"
   },
   "keywords": [
     "mcp",
