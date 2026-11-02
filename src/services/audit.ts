@@ -27,7 +27,7 @@ export function buildPrivacyAudit(): Record<string, unknown> {
     local_config_secure_permissions: sources.local.secure_permissions,
     privacy_mode_default: parsePrivacyMode(value("EIGHT_SLEEP_PRIVACY_MODE")),
     raw_payloads_opt_in: true,
-    cache_enabled: parseBool(value("EIGHT_SLEEP_CACHE")),
+    cache_enabled: false,
     cache_path: value("EIGHT_SLEEP_CACHE_PATH") ?? join(homedir(), ".eight-sleep-mcp", "cache.sqlite"),
     token_path: value("EIGHT_SLEEP_TOKEN_PATH") ?? join(homedir(), ".eight-sleep-mcp", "tokens.json"),
     mutations_enabled: parseBool(value("EIGHT_SLEEP_ALLOW_MUTATIONS")),

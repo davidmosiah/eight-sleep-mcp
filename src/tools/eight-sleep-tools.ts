@@ -277,7 +277,7 @@ export function registerEightSleepTools(server: McpServer): void {
     "eight_sleep_cache_status",
     {
       title: "Eight Sleep Cache Status",
-      description: "Show optional local SQLite cache status. Enable with EIGHT_SLEEP_CACHE=sqlite or EIGHT_SLEEP_CACHE=true.",
+      description: "Show cache status. Authenticated response caching is disabled; legacy EIGHT_SLEEP_CACHE values are ignored and old files are not read.",
       inputSchema: ResponseOnlyInputSchema.shape,
       outputSchema: CacheStatusOutputSchema.shape,
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false }

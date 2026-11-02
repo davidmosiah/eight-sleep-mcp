@@ -147,7 +147,7 @@ Required env (or use setup):
 Optional env:
   EIGHT_SLEEP_ALLOW_MUTATIONS=true   Enable write tools (set_temperature, set_side, alarms, away)
   EIGHT_SLEEP_PRIVACY_MODE=structured|summary|raw
-  EIGHT_SLEEP_CACHE=sqlite           Enable on-disk response cache
+  EIGHT_SLEEP_CACHE                  Legacy key ignored; authenticated caching disabled
   EIGHT_SLEEP_CLIENT_ID / EIGHT_SLEEP_CLIENT_SECRET   Override default Android-app credentials
 
 Unofficial: this server uses the same private endpoints the Eight Sleep mobile app talks to.

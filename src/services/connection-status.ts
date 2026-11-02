@@ -79,7 +79,7 @@ export async function buildConnectionStatus(options: ConnectionStatusOptions = {
       error: sources.local.error
     },
     token,
-    cache: { enabled: parseBool(value("EIGHT_SLEEP_CACHE")), path: cachePath },
+    cache: { enabled: false, path: cachePath },
     next_steps: buildNextSteps({ missingEnv, token, nodeSupported })
   };
 }
