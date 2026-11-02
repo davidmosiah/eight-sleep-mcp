@@ -46,7 +46,7 @@
         },
         {
           "name": "EIGHT_SLEEP_CACHE",
-          "description": "Optional SQLite cache toggle. Set to true or sqlite to enable.",
+          "description": "Legacy compatibility key. Authenticated response caching is disabled; this value is ignored.",
           "isRequired": false,
           "format": "string",
           "isSecret": false
@@ -77,3 +77,4 @@
   ],
   "websiteUrl": "https://wellness.delx.ai/connectors/eight-sleep"
 }
+

@@ -20,7 +20,8 @@ export function getConfig(): EightSleepConfig {
   const tokenPath = value("EIGHT_SLEEP_TOKEN_PATH") ?? join(homedir(), ".eight-sleep-mcp", "tokens.json");
   const cachePath = value("EIGHT_SLEEP_CACHE_PATH") ?? join(homedir(), ".eight-sleep-mcp", "cache.sqlite");
   const privacyMode = parsePrivacyMode(value("EIGHT_SLEEP_PRIVACY_MODE"));
-  const cacheEnabled = parseBool(value("EIGHT_SLEEP_CACHE"), false);
+  // Fail closed: a shared local response cache cannot establish current provider authorization.
+  const cacheEnabled = false;
   const allowMutations = parseBool(value("EIGHT_SLEEP_ALLOW_MUTATIONS"), false);
 
   const missing = [

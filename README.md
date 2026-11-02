@@ -155,7 +155,7 @@ Call `eight_sleep_privacy_audit` at any time to inspect the current posture with
 | `EIGHT_SLEEP_PASSWORD` | Account password. |
 | `EIGHT_SLEEP_ALLOW_MUTATIONS` | Enable write tools (keep unset in default snippets). |
 | `EIGHT_SLEEP_PRIVACY_MODE` | `summary` / `structured` / `raw`. |
-| `EIGHT_SLEEP_CACHE` | `sqlite` to enable on-disk response cache. |
+| `EIGHT_SLEEP_CACHE` | Legacy compatibility key; authenticated response caching is disabled and this value is ignored. |
 | `EIGHT_SLEEP_TOKEN_PATH` | Override token storage path. |
 | `EIGHT_SLEEP_CLIENT_ID` / `EIGHT_SLEEP_CLIENT_SECRET` | Override Android-app credential defaults (advanced). |
 
@@ -191,3 +191,4 @@ npx -y eight-sleep-mcp-unofficial call eight_sleep_connection_status --json '{}'
 ```
 
 Copy `skill/SKILL.md` into your agent skills dir.
+

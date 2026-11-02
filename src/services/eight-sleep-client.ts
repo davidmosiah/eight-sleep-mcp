@@ -7,7 +7,7 @@ import {
   TOKEN_REFRESH_BUFFER_SECONDS
 } from "../constants.js";
 import type { EightSleepConfig, EightSleepTokenSet } from "../types.js";
-import { EightSleepCache, disabledCacheStatus, type CacheStatus } from "./cache.js";
+import type { CacheStatus } from "./cache.js";
 import { redactErrorMessage } from "./redaction.js";
 import { TokenStore } from "./token-store.js";
 import { trendsQueryHasConflictingIncludes } from "./trends-query.js";
@@ -29,15 +29,13 @@ interface AuthResponse {
 
 export class EightSleepClient {
   private readonly tokenStore: TokenStore;
-  private cache?: EightSleepCache;
 
   constructor(private readonly config: EightSleepConfig) {
     this.tokenStore = new TokenStore(config.tokenPath);
   }
 
   cacheStatus(): CacheStatus {
-    if (!this.config.cacheEnabled) return disabledCacheStatus(this.config.cachePath);
-    return this.getCache().status();
+    return { enabled: false, path: this.config.cachePath, entries: 0 };
   }
 
   async ensureLogin(): Promise<EightSleepTokenSet> {
@@ -74,10 +72,10 @@ export class EightSleepClient {
     if (response.status === 401) {
       const refreshed = await this.refreshToken();
       const retry = await this.fetchWithRetry(url, this.requestInit(method, refreshed, options));
-      return this.parseAndCache(method, url, retry);
+      return this.parseResponse(retry);
     }
 
-    return this.parseAndCache(method, url, response);
+    return this.parseResponse(response);
   }
 
   private requestInit(method: HttpMethod, token: EightSleepTokenSet, options: RequestOptions): RequestInit {
@@ -171,27 +169,6 @@ export class EightSleepClient {
       );
     }
     return payload ?? {};
-  }
-
-  private async parseAndCache(method: HttpMethod, url: string, response: Response): Promise<unknown> {
-    try {
-      const payload = await this.parseResponse(response);
-      if (this.config.cacheEnabled && method === "GET") {
-        this.getCache().set(method, url, payload);
-      }
-      return payload;
-    } catch (error) {
-      if (this.config.cacheEnabled && method === "GET") {
-        const cached = this.getCache().get(method, url);
-        if (cached !== undefined) return cached;
-      }
-      throw error;
-    }
-  }
-
-  private getCache(): EightSleepCache {
-    this.cache ??= new EightSleepCache(this.config.cachePath);
-    return this.cache;
   }
 
   private async fetchWithRetry(url: string, init: RequestInit): Promise<Response> {
